@@ -70,45 +70,52 @@ export class Transformer {
       }
     }
 
-    const transformer = sharp(originalImage).rotate()
+    try {
+      const transformer = sharp(originalImage).rotate()
 
-    if (!options.format) {
-      options.format = (await transformer.metadata()).format as format
+      if (!options.format) {
+        options.format = (await transformer.metadata()).format as format
+      }
+
+      if (options.trim) {
+        transformer.trim()
+      }
+
+      if (options.crop) {
+        const [cropWidth, cropHeight] = this.getCropDimensions(
+          this.cropMaxSize,
+          options.width,
+          options.height,
+        )
+        transformer.resize(cropWidth, cropHeight, {
+          position: options.gravity,
+        })
+      } else {
+        transformer.resize(options.width, options.height, {
+          fit: 'inside',
+          withoutEnlargement: true,
+        })
+      }
+
+      const image = await transformer
+        .toFormat(options.format, {
+          progressive: options.progressive,
+          quality: options.quality,
+        })
+        .toBuffer()
+
+      this.log('Resizing done')
+
+      const result = { format: options.format, image }
+
+      this.log(`Caching ${cacheKey} ...`)
+      await this.cache.set(cacheKey, result)
+      return result
+    } catch (e) {
+      if (options.bypassOnError) {
+        return originalImage;
+      }
+      throw e;
     }
-
-    if (options.trim) {
-      transformer.trim()
-    }
-
-    if (options.crop) {
-      const [cropWidth, cropHeight] = this.getCropDimensions(
-        this.cropMaxSize,
-        options.width,
-        options.height,
-      )
-      transformer.resize(cropWidth, cropHeight, {
-        position: options.gravity,
-      })
-    } else {
-      transformer.resize(options.width, options.height, {
-        fit: 'inside',
-        withoutEnlargement: true,
-      })
-    }
-
-    const image = await transformer
-      .toFormat(options.format, {
-        progressive: options.progressive,
-        quality: options.quality,
-      })
-      .toBuffer()
-
-    this.log('Resizing done')
-
-    const result = { format: options.format, image }
-
-    this.log(`Caching ${cacheKey} ...`)
-    await this.cache.set(cacheKey, result)
-    return result
   }
 }

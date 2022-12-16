@@ -58,6 +58,10 @@ export class ResizeDto {
   @IsBoolean()
   public trim: boolean = false
 
+  @Transform((value) => value === 'true')
+  @IsBoolean()
+  public bypassOnError: boolean = false
+
   @IsIn([
     'north',
     'northeast',
