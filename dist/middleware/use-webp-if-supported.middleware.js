@@ -4,7 +4,7 @@ exports.useWebpIfSupported = void 0;
 function useWebpIfSupported(req, res, next) {
     var _a;
     const { dto } = res.locals;
-    if ((_a = req.headers.accept) === null || _a === void 0 ? void 0 : _a.includes('image/webp')) {
+    if (!dto.format && ((_a = req.headers.accept) === null || _a === void 0 ? void 0 : _a.includes('image/webp'))) {
         dto.format = 'webp';
     }
     next();
