@@ -75,9 +75,7 @@
     "clean": "rimraf dist",
     "start:example": "DEBUG=express-sharp* nodemon --exec 'node -r ts-node/register' -w . --inspect example/app.ts",
     "lint": "eslint --cache .",
-    "test": "jest",
-    "ci:test": "jest --coverage",
-    "prepare": "husky install"
+    "test": "jest"
   },
   "engines": {
     "node": ">= 12.0.0"
