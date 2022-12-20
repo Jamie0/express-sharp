@@ -1,6 +1,5 @@
 tsconfig.build.tsbuildinfo
 .eslintcache
-dist
 # Logs
 logs
 *.log
