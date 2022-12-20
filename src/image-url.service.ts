@@ -30,7 +30,7 @@ export class ImageUrl {
       .sort()
       .forEach(([name, value]) => {
         url.searchParams.set(
-          QueryParams[name as Exclude<keyof ResizeDto, 'url'>],
+          QueryParams[name as Exclude<keyof ResizeDto, 'url'|'bypassOnError'>],
 
           // Type Guard in .filter() does not work:
           // > A type predicate cannot reference element 'value' in a binding

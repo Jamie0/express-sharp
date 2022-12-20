@@ -113,7 +113,7 @@ export class Transformer {
       return result
     } catch (e) {
       if (options.bypassOnError) {
-        return originalImage;
+        return { format: options.format, image: originalImage };
       }
       throw e;
     }
