@@ -8,7 +8,7 @@ export function useWebpIfSupported(
 ): void {
   const { dto } = res.locals as { dto: ResizeDto }
 
-  if (req.headers.accept?.includes('image/webp')) {
+  if (!dto.format && req.headers.accept?.includes('image/webp')) {
     dto.format = 'webp'
   }
 
